@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cloud.test.mapper.ChatRobotMapper">
+  
+	<select id="get" parameterType="string" resultType="chatRobot">
+		select * from chat_robot where id = #{id}
+	</select>
+
+	<select id="list" parameterType="chatRobot" resultType="chatRobot">
+		select * from chat_robot
+	</select>
+
+	<select id="listPage" parameterType="page" resultType="chatRobot">
+		select * from chat_robot
+	</select>
+
+</mapper>

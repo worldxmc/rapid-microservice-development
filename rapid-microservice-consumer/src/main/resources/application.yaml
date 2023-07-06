@@ -1,0 +1,123 @@
+server:
+  port: 9000
+  servlet:
+    context-path: /
+spring: 
+  profiles:
+    active: dev
+  application:
+    name: cloud-test
+  context:
+    type: redis
+    sid: userSession
+    uid: userInfo
+    ticket: token
+  configurer:
+    enabled: true
+    interceptors:
+      - cloud.test.web.CommonInterceptor
+  xss:
+    enabled: true
+    excludes:
+    urlPatterns: /*
+    contentType:
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/cloud?serverTimezone=GMT%2B8&characterEncoding=utf8&useUnicode=true&useSSL=false&nullCatalogMeansCurrent=true
+    username: root
+    password: root
+    driverClassName: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    # druid连接池配置
+    druid:
+      # 驱动类
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      # 初始化大小
+      initial-size: 5
+      # 最小连接池数量
+      min-idle: 10
+      # 最大连接池数量
+      max-active: 20
+      # 获取连接时最大等待时间，单位毫秒（配置后默认启用公平锁）
+      max-wait: 6000
+      # 间隔多久进行检测一次需要关闭的空闲连接
+      time-between-eviction-runs-millis: 60000
+      # 连接可以保持空闲而不被关闭的最小时间
+      min-evictable-idle-time-millis: 300000
+      # 连接可以保持空闲而不被关闭的最大时间
+      max-evictable-idle-time-millis: 900000
+      # 检测连接是否有效的sql（若未配置则testOnBorrow、testOnReturn、testWhileIdle均不生效）
+      validation-query: SELECT 1
+      # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
+      test-while-idle: true
+      # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+      test-on-borrow: false
+      # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+      test-on-return: false
+      # 连接池中的minIdle数量以内的连接，空闲时间超过minEvictableIdleTimeMillis，则会执行keepAlive操作
+      keep-alive: true
+      phy-max-use-count: 1000
+      # 有时粗心的程序编写者从连接池中获取连接使用后忘记关闭连接，这样就会导致连接池逐渐达到maxActive直至无法提供服务。
+      # 现代连接池一般提供一种“智能”的检查，但设置了removeAbandoned="true"时，当连接池连接数到达(getNumIdle() < 2) and (getNumActive() > getMaxActive() - 3) [空闲的连接小于2并且活动的连接大于(最大连接-3)] 时便会启动连接回收，那种活动时间超过removeAbandonedTimeout="60"的连接将会被回收，同时如果logAbandoned="true"设置为true,程序在回收连接的同时会打印日志。
+      # removeAbandoned是连接池的高级功能，理论上这中配置不应该出现在实际的生产环境，因为有时应用程序执行长事务，可能这种情况下，会被连接池误回收，该种配置一般在程序测试阶段，为了定位连接泄漏的具体代码位置，被开启。
+      # 生产环境中连接的关闭应该靠程序自己保证。
+      #      # 超过时间限制是否回收
+      #      remove-abandoned: true
+      #      # 超时时间；单位为秒。1800秒=30分钟
+      #      remove-abandoned-timeout: 1800
+      #      # 关闭abandoned连接时输出错误日志
+      #      log-abandoned: true
+      # Druid的web监控功能
+      stat-view-servlet:
+        # 是否启用
+        enabled: true
+        # 登录名
+        login-username: admin
+        # 登录密码
+        login-password: 444
+        # IP白名单
+        allow: 127.0.0.1
+        # IP黑名单
+        deny:
+      # 配置Stat过滤器
+      web-stat-filter:
+        # 是否启用
+        enabled: true
+        # 排除拦截路径
+        exclusions: "*.js,*.css,/druid/*"
+      # 监控统计拦截的过滤器列表
+      filters: stat,wall
+  servlet:
+    multipart:
+      max-file-size: 1000000000
+      max-request-size: 10000000000
+  redis:
+    host: 10.1.1.31
+    port: 6379
+    database: 0
+    password:
+    timeout: 6000
+    lettuce:
+      pool:
+        max-active: 1000
+        max-wait: -1
+        max-idle: 10
+        min-idle: 5
+      shutdown-timeout: 100
+#    iscluster: true
+#    cluster:
+#      nodes:
+#      - 10.207.37.88:7001
+#      - 10.207.37.88:7002
+#      - 10.207.37.88:7003
+#      - 10.207.37.89:7004
+#      - 10.207.37.89:7005
+#      - 10.207.37.89:7006
+#      max-redirects: 3
+mybatis:
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+  config-location: classpath:config/mybatis-config.xml
+
+fileBasePath: D://cloud

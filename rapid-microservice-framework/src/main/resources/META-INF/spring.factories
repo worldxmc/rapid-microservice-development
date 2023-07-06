@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cloud.framework.web.context.SysContextConfiguration,\
+cloud.framework.exception.GlobalExceptionHandler,\
+cloud.framework.cache.RedisConfiguration,\
+cloud.framework.async.AsyncConfiguration
